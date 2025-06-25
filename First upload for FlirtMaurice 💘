@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>FlirtMaurice - Dynamic Dating App for Mauritius</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+        }
+        /* Scrollbar for matches carousel */
+        #matches-list::-webkit-scrollbar {
+            height: 8px;
+        }
+        #matches-list::-webkit-scrollbar-thumb {
+            background-color: #ec4899;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-pink-50 to-white min-h-screen flex flex-col">
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img alt="FlirtMaurice logo" class="rounded-full" height="40" src="https://storage.googleapis.com/a1aa/image/0ece8850-947b-4c23-1d69-f4db445de854.jpg" width="40"/>
+                <h1 class="text-2xl font-bold text-pink-600">FlirtMaurice</h1>
+            </div>
+            <nav aria-label="Primary Navigation" class="hidden md:flex space-x-8 text-gray-700 font-semibold">
+                <button aria-controls="discover" aria-expanded="true" class="hover:text-pink-600 transition focus:outline-none" id="nav-discover-btn">Discover</button>
+                <button aria-controls="matches" aria-expanded="false" class="hover:text-pink-600 transition focus:outline-none" id="nav-matches-btn">Matches</button>
+                <button aria-controls="messages" aria-expanded="false" class="hover:text-pink-600 transition focus:outline-none" id="nav-messages-btn">Messages</button>
+                <button aria-controls="profile" aria-expanded="false" class="hover:text-pink-600 transition focus:outline-none" id="nav-profile-btn">Profile</button>
+            </nav>
+            <button aria-label="Open menu" class="md:hidden text-pink-600 focus:outline-none" id="menu-btn">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </div>
+        <nav aria-label="Mobile Navigation" class="hidden md:hidden bg-white border-t border-pink-100" id="mobile-menu">
+            <button class="block w-full text-left px-4 py-3 border-b border-pink-100 text-pink-600 font-semibold focus:outline-none" data-target="discover">Discover</button>
+            <button class="block w-full text-left px-4 py-3 border-b border-pink-100 text-pink-600 font-semibold focus:outline-none" data-target="matches">Matches</button>
+            <button class="block w-full text-left px-4 py-3 border-b border-pink-100 text-pink-600 font-semibold focus:outline-none" data-target="messages">Messages</button>
+            <button class="block w-full text-left px-4 py-3 text-pink-600 font-semibold focus:outline-none" data-target="profile">Profile</button>
+        </nav>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6 flex flex-col">
+        <!-- Sections container -->
+        <section class="mb-12" id="hero">
+            <div class="bg-pink-50 rounded-lg p-6 md:p-12 flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-4xl font-extrabold text-pink-600 mb-4">Find Your Perfect Match in Mauritius</h2>
+                    <p class="text-gray-700 mb-6 text-lg">FlirtMaurice connects you with singles across the beautiful island of Mauritius. Discover, chat, and meet your soulmate today!</p>
+                    <button aria-label="Get started with FlirtMaurice" class="inline-block bg-pink-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-pink-700 transition" id="btn-get-started">Get Started</button>
+                </div>
+                <div class="md:w-1/2">
+                    <img alt="A happy couple holding hands" class="rounded-lg shadow-lg mx-auto" height="400" src="https://storage.googleapis.com/a1aa/image/ce65b1a7-e84b-40f1-e284-7d309ad2149e.jpg" width="600"/>
+                </div>
+            </div>
+        </section>
+        <!-- Dynamic Sections -->
+        <section aria-label="Discover Singles" class="hidden flex-col" id="discover">
+            <h3 class="text-3xl font-bold text-pink-600 mb-8 text-center">Discover Singles Near You</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="discover-list" role="list">
+                <!-- Profiles dynamically inserted here -->
+            </div>
+            <div class="mt-8 text-center">
+                <button aria-label="Load more profiles" class="bg-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-pink-700 transition" id="load-more-btn">Load More</button>
+            </div>
+        </section>
+        <section aria-label="Your Matches" class="hidden flex-col" id="matches" tabindex="0">
+            <h3 class="text-3xl font-bold text-pink-600 mb-8 text-center">Your Matches</h3>
+            <div aria-live="polite" class="flex space-x-6 overflow-x-auto px-4 py-2" id="matches-list" role="list">
+                <!-- Matches dynamically inserted here -->
+            </div>
+            <div class="mt-6 text-center">
+                <button aria-label="Clear all matches" class="bg-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-pink-700 transition" id="clear-matches-btn">Clear Matches</button>
+            </div>
+        </section>
+        <section aria-label="Your Messages" class="hidden flex-col max-w-4xl mx-auto" id="messages" tabindex="0">
+            <h3 class="text-3xl font-bold text-pink-600 mb-8 text-center">Your Messages</h3>
+            <div aria-live="polite" class="bg-white rounded-lg shadow-md p-6 max-h-[400px] overflow-y-auto" id="messages-list" role="list">
+                <!-- Messages dynamically inserted here -->
+            </div>
+            <form aria-label="Send new message" class="mt-4 flex space-x-4" id="message-form">
+                <select aria-label="Select recipient" aria-required="true" class="flex-shrink-0 w-40 px-3 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="message-recipient" required="">
+                    <option disabled="" selected="" value="">Select recipient</option>
+                </select>
+                <input aria-label="Message text" aria-required="true" class="flex-grow px-4 py-2 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="message-input" placeholder="Type your message..." required="" type="text"/>
+                <button aria-label="Send message" class="bg-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-pink-700 transition" type="submit">Send</button>
+            </form>
+        </section>
+        <section aria-label="Your Profile" class="hidden max-w-3xl mx-auto bg-pink-50 rounded-lg p-8 shadow-lg" id="profile" tabindex="0">
+            <h3 class="text-3xl font-bold text-pink-600 mb-6 text-center">Your Profile</h3>
+            <form class="space-y-6" id="profile-form" novalidate="">
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-name">Full Name</label>
+                    <input aria-required="true" class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="profile-name" name="profile-name" required="" type="text"/>
+                </div>
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-email">Email Address</label>
+                    <input aria-required="true" class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="profile-email" name="profile-email" required="" type="email"/>
+                </div>
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-location">Location</label>
+                    <select aria-required="true" class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="profile-location" name="profile-location" required="">
+                        <option disabled="" value="">Select your city</option>
+                        <option>Port Louis</option>
+                        <option>Curepipe</option>
+                        <option>Grand Baie</option>
+                        <option>Flic en Flac</option>
+                        <option>Mahebourg</option>
+                        <option>Tamarin</option>
+                        <option>Quatre Bornes</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-gender">Gender</label>
+                    <select aria-required="true" class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="profile-gender" name="profile-gender" required="">
+                        <option disabled="" value="">Select your gender</option>
+                        <option>Female</option>
+                        <option>Male</option>
+                        <option>Non-binary</option>
+                        <option>Prefer not to say</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-bio">About You</label>
+                    <textarea class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none" id="profile-bio" name="profile-bio" placeholder="Tell others about yourself..." rows="4"></textarea>
+                </div>
+                <div>
+                    <label class="block text-pink-700 font-semibold mb-2" for="profile-photo">Profile Photo URL</label>
+                    <input class="w-full px-4 py-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500" id="profile-photo" name="profile-photo" placeholder="https://example.com/photo.jpg" type="url"/>
+                </div>
+                <button aria-label="Save profile" class="w-full bg-pink-600 text-white py-3 rounded-full font-semibold hover:bg-pink-700 transition" type="submit">Save Profile</button>
+            </form>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-pink-100 mt-20 py-6">
+        <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            © 2024 FlirtMaurice. All rights reserved. Made with <i class="fas fa-heart text-pink-600"></i> for Mauritius.
+        </div>
+    </footer>
+    <script>
+        // Data storage keys
+        const STORAGE_KEYS = {
+            PROFILE: "flirtmaurice_profile",
+            DISCOVERED: "flirtmaurice_discovered",
+            MATCHES: "flirtmaurice_matches",
+            MESSAGES: "flirtmaurice_messages",
+        };
+
+        // Sample profiles pool (would come from backend in real app)
+        const sampleProfiles = [
+            { id: "p1", name: "Aisha", age: 27, location: "Port Louis", bio: "Loves hiking, beach volleyball, and Creole cuisine.", photo: "https://placehold.co/400x400/png?text=Aisha&font=roboto", gender: "Female" },
+            { id: "p2", name: "Jean", age: 30, location: "Curepipe", bio: "Enjoys photography, music festivals, and exploring nature.", photo: "https://placehold.co/400x400/png?text=Jean&font=roboto", gender: "Male" },
+            { id: "p3", name: "Lina", age: 25, location: "Grand Baie", bio: "Passionate about yoga, cooking, and beach cleanups.", photo: "https://placehold.co/400x400/png?text=Lina&font=roboto", gender: "Female" },
+            { id: "p4", name: "Raj", age: 32, location: "Flic en Flac", bio: "Loves surfing, cooking spicy food, and live music.", photo: "https://placehold.co/400x400/png?text=Raj&font=roboto", gender: "Male" },
+            { id: "p5", name: "Maya", age: 28, location: "Mahebourg", bio: "Enjoys dancing sega, reading novels, and beach picnics.", photo: "https://placehold.co/400x400/png?text=Maya&font=roboto", gender: "Female" },
+            { id: "p6", name: "Kumar", age: 29, location: "Quatre Bornes", bio: "Passionate about football, cooking, and traveling.", photo: "https://placehold.co/400x400/png?text=Kumar&font=roboto", gender: "Male" },
+            { id: "p7", name: "Sonia", age: 26, location: "Tamarin", bio: "Loves snorkeling, painting, and beach yoga.", photo: "https://placehold.co/400x400/png?text=Sonia&font=roboto", gender: "Female" },
+            { id: "p8", name: "Arjun", age: 31, location: "Port Louis", bio: "Enjoys football, music, and beach parties.", photo: "https://placehold.co/400x400/png?text=Arjun&font=roboto", gender: "Male" },
+            { id: "p9", name: "Leena", age: 27, location: "Flic en Flac", bio: "Yoga lover, foodie, and nature enthusiast.", photo: "https://placehold.co/400x400/png?text=Leena&font=roboto", gender: "Female" },
+            { id: "p10", name: "Dinesh", age: 33, location: "Mahebourg", bio: "Beach lover, cook, and music fan.", photo: "https://placehold.co/400x400/png?text=Dinesh&font=roboto", gender: "Male" },
+        ];
+
+        // State
+        let userProfile = null;
+        let discoveredProfiles = [];
+        let matches = [];
+        let messages = [];
+
+        // DOM Elements
+        const discoverSection = document.getElementById("discover");
+        const matchesSection = document.getElementById("matches");
+        const messagesSection = document.getElementById("messages");
+        const profileSection = document.getElementById("profile");
+        const heroSection = document.getElementById("hero");
+
+        const discoverList = document.getElementById("discover-list");
+        const matchesList = document.getElementById("matches-list");
+        const messagesList = document.getElementById("messages-list");
+        const messageForm = document.getElementById("message-form");
+        const messageRecipientSelect = document.getElementById("message-recipient");
+        const messageInput = document.getElementById("message-input");
+        const profileForm = document.getElementById("profile-form");
+
+        const loadMoreBtn = document.getElementById("load-more-btn");
+        const clearMatchesBtn = document.getElementById("clear-matches-btn");
+
+        // Navigation buttons
+        const navDiscoverBtn = document.getElementById("nav-discover-btn");
+        const navMatchesBtn = document.getElementById("nav-matches-btn");
+        const navMessagesBtn = document.getElementById("nav-messages-btn");
+        const navProfileBtn = document.getElementById("nav-profile-btn");
+
+        // Mobile menu
+        const menuBtn = document.getElementById("menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        // Pagination for discover
+        const DISCOVER_PAGE_SIZE = 4;
+        let discoverPage = 0;
+
+        // Utility: Save to localStorage
+        function saveToStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Utility: Load from localStorage
+        function loadFromStorage(key) {
+            const data = localStorage.getItem(key);
+            if (!data) return null;
+            try {
+                return JSON.parse(data);
+            } catch {
+                return null;
+            }
+        }
+
+        // Initialize app state from storage or defaults
+        function initState() {
+            userProfile = loadFromStorage(STORAGE_KEYS.PROFILE);
+            discoveredProfiles = loadFromStorage(STORAGE_KEYS.DISCOVERED) || [];
+            matches = loadFromStorage(STORAGE_KEYS.MATCHES) || [];
+            messages = load
